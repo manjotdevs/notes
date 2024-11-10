@@ -1,16 +1,18 @@
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Feather } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import HomeScreen from "./navigations/homeScreen";
 import SettingsScreen from "./navigations/settingsSreen";
 import useTheme from "./hook/theme";
 
 type TabParamList = {
-  Home: undefined;
-  Settings: undefined;
+  HomeScreen: undefined;
+  SettingScreen: undefined;
 };
 
 const Tab = createBottomTabNavigator<TabParamList>();
+
 const App: React.FC = () => {
   const { colors } = useTheme();
   return (
@@ -18,26 +20,33 @@ const App: React.FC = () => {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
-          tabBarStyle: { backgroundColor: colors.background },
-          tabBarIcon: ({ color, size }) => {
-            let iconName: React.ComponentProps<typeof Feather>["name"];
+          tabBarShowLabel: false,
+          tabBarStyle: {
+            position: "absolute",
+            backgroundColor: colors.secondaryTabBarColor,
+            borderTopWidth: 0,
+            elevation: 0,
+            height: 90,
+          },
+          tabBarIcon: ({ color, focused }) => {
+            let iconName:any;
+            let iconSize = 30;
 
-            if (route.name === "Home") {
-              iconName = "home";
-            } else if (route.name === "Settings") {
-              iconName = "settings";
+            if (route.name === "HomeScreen") {
+              iconName = focused ? "home-sharp" : "home-outline"; // Use sharp when focused, outline when not
+            } else if (route.name === "SettingScreen") {
+              iconName = focused ? "settings-sharp" : "settings-outline";
             } else {
               iconName = "circle";
             }
-
-            return <Feather name={iconName} size={size} color={color} />;
+            return <Ionicons name={iconName} size={iconSize} color={color} />;
           },
-          tabBarActiveTintColor: "#FF6500",
-          tabBarInactiveTintColor: "gray",
+          tabBarActiveTintColor: colors.primaryActive,
+          tabBarInactiveTintColor: colors.primaryInactive,
         })}
       >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="HomeScreen" component={HomeScreen} />
+        <Tab.Screen name="SettingScreen" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

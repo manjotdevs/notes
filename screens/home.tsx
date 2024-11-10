@@ -1,10 +1,11 @@
-import { View, Text, Button } from "react-native";
-import ThemeProvider from "../themes/themeProvider";
+import { View, Text, Button, StyleSheet } from "react-native";
+import useTheme from "../hook/theme";
 
 const Home: React.FC = () => {
+  const { colors } = useTheme();
   return (
-    <View>
-      <Text>hi</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.text, {backgroundColor: colors.secondary},{color: colors.text}]}>hi</Text>
       <Button
         onPress={() => {
           console.log();
@@ -14,5 +15,20 @@ const Home: React.FC = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  text:{
+    height: 20,
+    width: 20,
+    padding: 20,
+    borderRadius: 10,
+
+  }
+});
 
 export default Home;
