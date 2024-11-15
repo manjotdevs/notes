@@ -10,6 +10,7 @@ const HomeScreen: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
+        headerShown:false,
         headerStyle: { backgroundColor: colors.background },
         headerShadowVisible: false,
       }}

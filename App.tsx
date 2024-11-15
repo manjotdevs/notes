@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
+import * as SplashScreen from "expo-splash-screen";
+import * as Font from "expo-font";
 import HomeScreen from "./navigations/homeScreen";
 import SettingsScreen from "./navigations/settingsSreen";
 import useTheme from "./hook/theme";
@@ -13,8 +15,35 @@ type TabParamList = {
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
+SplashScreen.preventAutoHideAsync(); 
+
 const App: React.FC = () => {
   const { colors } = useTheme();
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      try {
+        await Font.loadAsync({
+          "Rubik": require("./assets/fonts/Rubik-Regular.ttf"),
+          "Rubik-bold": require("./assets/fonts/Rubik-Bold.ttf"),
+          "Rubik-semibold": require("./assets/fonts/Rubik-SemiBold.ttf"),
+        });
+        setFontsLoaded(true);
+        await SplashScreen.hideAsync(); // Hide the splash screen once fonts are loaded
+      } catch (e) {
+        console.warn(e);
+      }
+    };
+
+    loadFonts();
+  }, []);
+
+  // Prevent rendering until fonts are loaded
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -29,11 +58,11 @@ const App: React.FC = () => {
             height: 90,
           },
           tabBarIcon: ({ color, focused }) => {
-            let iconName:any;
+            let iconName: any;
             let iconSize = 30;
 
             if (route.name === "HomeScreen") {
-              iconName = focused ? "home-sharp" : "home-outline"; // Use sharp when focused, outline when not
+              iconName = focused ? "home-sharp" : "home-outline";
             } else if (route.name === "SettingScreen") {
               iconName = focused ? "settings-sharp" : "settings-outline";
             } else {
@@ -41,8 +70,8 @@ const App: React.FC = () => {
             }
             return <Ionicons name={iconName} size={iconSize} color={color} />;
           },
-          tabBarActiveTintColor: colors.primaryActive,
-          tabBarInactiveTintColor: colors.primaryInactive,
+          tabBarActiveTintColor: colors.primary,
+          tabBarInactiveTintColor: colors.primaryText,
         })}
       >
         <Tab.Screen name="HomeScreen" component={HomeScreen} />

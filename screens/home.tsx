@@ -1,34 +1,47 @@
-import { View, Text, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
 import useTheme from "../hook/theme";
 
-const Home: React.FC = () => {
+const Home: React.FC = ({navigation}:any) => {
   const { colors } = useTheme();
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.text, {backgroundColor: colors.secondary},{color: colors.text}]}>hi</Text>
-      <Button
-        onPress={() => {
-          console.log();
-        }}
-        title="Learn More"
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      <ScrollView style={styles.mainScreen}>
+        <View>
+          <Text style={[styles.titleText, { color: colors.primaryText }]}>
+            Notes
+          </Text>
+          <Button
+        title="Go to Details"
+        onPress={() => navigation.navigate('SettingScreen')}
       />
-    </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    width: "100%",
+    height: "100%",
   },
-  text:{
-    height: 20,
-    width: 20,
-    padding: 20,
-    borderRadius: 10,
-
-  }
+  titleText: {
+    fontFamily: "Rubik-bold",
+    fontSize: 32,
+  },
+  mainScreen: {
+    padding: 12,
+  },
 });
 
 export default Home;
